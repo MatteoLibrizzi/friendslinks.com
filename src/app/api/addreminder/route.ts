@@ -1,6 +1,7 @@
 import { kv } from "@vercel/kv";
 import { KVRemindersRepository } from "../reporitory/Reminders";
 import { v4 } from "uuid";
+import { mailHandler } from "../constants";
 
 export async function POST(request: Request) {
     const body = await request.json()
@@ -14,6 +15,13 @@ export async function POST(request: Request) {
         startDateTimestamp: body.startDateTimestamp,
         friendName: body.friendName,
         id: v4()
+    })
+
+    await mailHandler.send({
+        from: "admin@mail.friendsremind.me",
+        to: ["librizzimatteo.ml@gmail.com"],
+        subject: "New reminder",
+        text: "New reminder for " + body.contactInfo + " " + body.notificationMethod + " " + body.frequencyInDays + " " + body.startDateTimestamp + " " + body.friendName + " " + body.id,
     })
 
 
