@@ -26,8 +26,6 @@ export class KVRemindersRepository extends RemindersRepository {
         const numberOfReminders = await kv.llen(`reminders:${contactInfo}`)
         const reminders = await kv.lrange(`reminders:${contactInfo}`, 0, numberOfReminders - 1) as any[]
 
-        console.log(reminders)
-
         return reminders ?? []
     }
 }

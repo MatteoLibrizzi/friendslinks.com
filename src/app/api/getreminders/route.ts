@@ -9,7 +9,6 @@ export async function POST(request: Request) {
 
     const remindersByContactInfo = await remindersRepo.getRemindersByContactInfo(body.contactInfo)
 
-    // TODO add next reminder fileld
     const reminders = remindersByContactInfo.map((reminder) => {
         return {
             ...reminder,

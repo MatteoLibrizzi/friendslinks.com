@@ -24,8 +24,6 @@ export class FriendsLinksStack extends cdk.Stack {
 	prod: boolean
 
 
-	// TODO setup IAM user with limited access to assign to vercel
-
 	constructor(scope: Construct, id: string, prod: boolean, props?: cdk.StackProps) {
 		super(scope, id, props)
 

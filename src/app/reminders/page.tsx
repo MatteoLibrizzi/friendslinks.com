@@ -155,22 +155,25 @@ export default function ReminderQuery() {
                 <div className="space-y-2">
                   <div className="flex items-center">
                     <Clock className="mr-2 h-4 w-4" />
-                    <span>Frequency in Days: {reminder.frequencyInDays}</span>
+                    <span>Every {reminder.frequencyInDays} Days</span>
                   </div>
                   <div className="flex items-center">
                     <Calendar className="mr-2 h-4 w-4" />
                     <span>
                       Start Date:{" "}
-                      <strong>
-                        {new Date(
-                          Date.parse(reminder.startDate)
-                        ).toDateString()}
-                      </strong>
+                      {new Date(reminder.startDateTimestamp).toDateString()}
                     </span>
                   </div>
                   <div className="flex items-center">
                     <Calendar className="mr-2 h-4 w-4" />
-                    <span>Next Reminder: {reminder.nextReminder}</span>
+                    <span>
+                      Next Reminder:{" "}
+                      <strong>
+                        {new Date(
+                          reminder.nextReminderTimestamp
+                        ).toDateString()}
+                      </strong>
+                    </span>
                   </div>
                 </div>
               </CardContent>

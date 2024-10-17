@@ -65,16 +65,22 @@ export default function Header() {
         </Link>
         <NavigationMenu className="hidden lg:flex pl-10">
           <NavigationMenuList>
-            <NavigationMenuLink asChild>
+            <NavigationMenuLink
+              asChild
+              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] shadow-sm"
+            >
               <Link
                 href="/"
-                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-[#FF5E6C] hover:text-white focus:bg-[#FF5E6C] focus:text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[#FF5E6C]/50 data-[state=open]:bg-[#FF5E6C]/50 dark:bg-gray-950 dark:hover:bg-[#FF5E6C] dark:hover:text-white dark:focus:bg-[#FF5E6C] dark:focus:text-white dark:data-[active]:bg-[#FF5E6C]/50 dark:data-[state=open]:bg-[#FF5E6C]/50"
+                className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors  focus:bg-[#FF5E6C] focus:text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[#FF5E6C]/50 data-[state=open]:bg-[#FF5E6C]/50 dark:bg-gray-950 dark:hover:bg-[#FF5E6C] dark:hover:text-white dark:focus:bg-[#FF5E6C] dark:focus:text-white dark:data-[active]:bg-[#FF5E6C]/50 dark:data-[state=open]:bg-[#FF5E6C]/50"
                 prefetch={false}
               >
-                Home <HomeIcon className="ml-1 h-4 w-4" />
+                Home <HomeIcon className="ml-1 h-4 w-4 " />
               </Link>
             </NavigationMenuLink>
-            <NavigationMenuLink asChild>
+            <NavigationMenuLink
+              asChild
+              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] shadow-sm"
+            >
               <Link
                 href="/reminders"
                 className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-[#FF5E6C] hover:text-white focus:bg-[#FF5E6C] focus:text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[#FF5E6C]/50 data-[state=open]:bg-[#FF5E6C]/50 dark:bg-gray-950 dark:hover:bg-[#FF5E6C] dark:hover:text-white dark:focus:bg-[#FF5E6C] dark:focus:text-white dark:data-[active]:bg-[#FF5E6C]/50 dark:data-[state=open]:bg-[#FF5E6C]/50"
@@ -83,7 +89,10 @@ export default function Header() {
                 My Reminders <MapPin className="ml-1 h-4 w-4" />
               </Link>
             </NavigationMenuLink>
-            <NavigationMenuLink asChild>
+            <NavigationMenuLink
+              asChild
+              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] shadow-sm"
+            >
               <Link
                 href="/addreminder"
                 className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-[#FF5E6C] hover:text-white focus:bg-[#FF5E6C] focus:text-white focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[#FF5E6C]/50 data-[state=open]:bg-[#FF5E6C]/50 dark:bg-gray-950 dark:hover:bg-[#FF5E6C] dark:hover:text-white dark:focus:bg-[#FF5E6C] dark:focus:text-white dark:data-[active]:bg-[#FF5E6C]/50 dark:data-[state=open]:bg-[#FF5E6C]/50"
@@ -94,17 +103,6 @@ export default function Header() {
             </NavigationMenuLink>
           </NavigationMenuList>
         </NavigationMenu>
-        {/* <div className="ml-auto flex gap-2">
-          <Button
-            variant="outline"
-            className="border-[#FF5E6C] text-[#FF5E6C] hover:bg-[#FF5E6C] hover:text-white"
-          >
-            Log In
-          </Button>
-          <Button className="bg-[#FF5E6C] text-white hover:bg-[#FF7A85]">
-            Sign Up
-          </Button>
-        </div> */}
       </header>
     </div>
   );
