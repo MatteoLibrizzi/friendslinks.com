@@ -67,7 +67,7 @@ export default function Header() {
           <NavigationMenuList>
             <NavigationMenuLink
               asChild
-              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] shadow-sm"
+              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] "
             >
               <Link
                 href="/"
@@ -79,7 +79,7 @@ export default function Header() {
             </NavigationMenuLink>
             <NavigationMenuLink
               asChild
-              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] shadow-sm"
+              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] "
             >
               <Link
                 href="/reminders"
@@ -91,7 +91,7 @@ export default function Header() {
             </NavigationMenuLink>
             <NavigationMenuLink
               asChild
-              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] shadow-sm"
+              className="text-[#FF5E6C] hover:text-white  hover:bg-[#FF5E6C] "
             >
               <Link
                 href="/addreminder"
