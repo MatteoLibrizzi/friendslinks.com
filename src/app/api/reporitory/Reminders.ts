@@ -3,7 +3,7 @@ import { kv } from "@vercel/kv";
 
 interface Reminder {
     id: string;
-    notificationMethod: "email" | "whatsapp";
+    notificationMethod: "email"
     contactInfo: string;
     frequencyInDays: number;
     startDateTimestamp: number;

@@ -29,19 +29,28 @@ const frequenciesToDays: any = {
 };
 
 export default function AddReminder() {
-  const [notificationMethod, setNotificationMethod] = useState<
-    "email" | "whatsapp"
-  >("email");
+  const [notificationMethod, setNotificationMethod] =
+    useState<"email">("email");
   const [friendName, setFriendName] = useState<string>("");
   const [selectedFrequency, setSelectedFrequency] = useState<string>("Weekly");
   const [startDate, setStartDate] = useState<Date>();
   const [email, setEmail] = useState("");
-  const [whatsappNumber, setWhatsappNumber] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [whatsappError, setWhatsappError] = useState("");
   const [friendNameError, setFriendNameError] = useState("");
   const [frequencyError, setFrequencyError] = useState("");
   const [startDateError, setStartDateError] = useState("");
+  const [creationButtonMessage, setCreationButtonMessage] =
+    useState("Create Reminder");
+  const [creationButtonDisabled, setCreationButtonDisabled] = useState(false);
+
+  const clearForm = () => {
+    setFriendName("");
+    setEmail("");
+    setEmailError("");
+    setFriendNameError("");
+    setFrequencyError("");
+    setStartDateError("");
+  };
 
   const validateEmail = (email: string) => {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -53,28 +62,33 @@ export default function AddReminder() {
     return true;
   };
 
-  const validateWhatsapp = (number: string) => {
-    const re = /^\+[1-9]\d{1,14}$/;
-    if (!re.test(number)) {
-      setWhatsappError("Enter a valid phone number");
-      return false;
-    }
-    setWhatsappError("");
-    return true;
-  };
   const handleSubmit = async (e: React.FormEvent) => {
     if (validateForm()) {
+      setCreationButtonDisabled(true);
+      setCreationButtonMessage("Creating Reminder...");
       const frequencyInDays = frequenciesToDays[selectedFrequency as any];
-      await fetch("/api/addreminder", {
+      const res = await fetch("/api/addreminder", {
         method: "POST",
         body: JSON.stringify({
           friendName,
           notificationMethod,
           frequencyInDays,
           startDateTimestamp: startDate ? startDate.getTime() : 0,
-          contactInfo: notificationMethod === "email" ? email : whatsappNumber,
+          contactInfo: notificationMethod === "email" ? email : "",
         }),
       });
+
+      if (res.ok) {
+        setCreationButtonMessage("Reminder Created ✅");
+        setTimeout(() => {
+          setCreationButtonMessage("Create Reminder");
+          setCreationButtonDisabled(false);
+
+          clearForm();
+        }, 3000);
+      } else {
+        setCreationButtonMessage("Failed to Create ❌");
+      }
     }
   };
 
@@ -104,8 +118,6 @@ export default function AddReminder() {
 
     if (notificationMethod === "email") {
       isValid = validateEmail(email) && isValid;
-    } else if (notificationMethod === "whatsapp") {
-      isValid = validateWhatsapp(whatsappNumber) && isValid;
     }
 
     return isValid;
@@ -124,8 +136,7 @@ export default function AddReminder() {
             value={notificationMethod}
             onValueChange={(selectedNotificationMethod) => {
               const typeSafeNotificationMethod = selectedNotificationMethod as
-                | "email"
-                | "whatsapp";
+                | "email";
               setNotificationMethod(typeSafeNotificationMethod);
             }}
             className="flex space-x-4"
@@ -135,13 +146,6 @@ export default function AddReminder() {
               <Label htmlFor="email" className="flex items-center">
                 <Mail className="mr-2 h-4 w-4" />
                 Email
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="whatsapp" id="whatsapp" />
-              <Label htmlFor="whatsapp" className="flex items-center">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                WhatsApp
               </Label>
             </div>
           </RadioGroup>
@@ -162,30 +166,6 @@ export default function AddReminder() {
               className={emailError ? "border-red-500" : ""}
             />
             {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
-          </div>
-        )}
-        {notificationMethod === "whatsapp" && (
-          <div className="space-y-2">
-            <Label htmlFor="whatsapp">
-              WhatsApp Number (e.g., +1234567890)
-            </Label>
-            <Input
-              id="whatsapp"
-              type="tel"
-              placeholder="Enter your WhatsApp number"
-              value={whatsappNumber}
-              onChange={(e) => {
-                setWhatsappNumber(e.target.value);
-                validateWhatsapp(e.target.value);
-              }}
-              required={notificationMethod === "whatsapp"}
-              className={whatsappError ? "border-red-500" : ""}
-            />
-            {whatsappError && (
-              <p className="text-red-500 text-sm overflow-hidden">
-                {whatsappError}
-              </p>
-            )}
           </div>
         )}
 
@@ -258,9 +238,10 @@ export default function AddReminder() {
 
         <Button
           onClick={handleSubmit}
+          disabled={creationButtonDisabled}
           className="w-full bg-[#FF5E6C] hover:bg-[#FF7A85] text-white"
         >
-          Create Reminder
+          {creationButtonMessage}
         </Button>
       </div>
     </main>

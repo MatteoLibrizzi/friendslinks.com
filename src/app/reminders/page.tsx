@@ -12,12 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Mail, MessageSquare, Calendar, Clock } from "lucide-react";
+import { Mail, Calendar, Clock } from "lucide-react";
 
 export default function ReminderQuery() {
-  const [contactMethod, setContactMethod] = useState<"email" | "whatsapp">(
-    "email"
-  );
+  const [contactMethod, setContactMethod] = useState<"email">("email");
   const [contactInfo, setContactInfo] = useState("");
   const [contactError, setContactError] = useState("");
   const [reminders, setReminders] = useState<any[]>([]);
@@ -29,12 +27,6 @@ export default function ReminderQuery() {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(value)) {
         setContactError("Please enter a valid email address");
-        return false;
-      }
-    } else {
-      const whatsappRegex = /^\+[1-9]\d{1,14}$/;
-      if (!whatsappRegex.test(value)) {
-        setContactError("Please enter a valid WhatsApp number");
         return false;
       }
     }
@@ -80,9 +72,7 @@ export default function ReminderQuery() {
           <RadioGroup
             id="contact-method"
             value={contactMethod}
-            onValueChange={(value) =>
-              setContactMethod(value as "email" | "whatsapp")
-            }
+            onValueChange={(value) => setContactMethod(value as "email")}
             className="flex space-x-4"
           >
             <div className="flex items-center space-x-2">
@@ -92,30 +82,17 @@ export default function ReminderQuery() {
                 Email
               </Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="whatsapp" id="whatsapp" />
-              <Label htmlFor="whatsapp" className="flex items-center">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                WhatsApp
-              </Label>
-            </div>
           </RadioGroup>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="contact-info">
-            {contactMethod === "email"
-              ? "Email Address"
-              : "WhatsApp Number (e.g., +1234567890)"}
+            {contactMethod === "email" ? "Email Address" : ""}
           </Label>
           <Input
             id="contact-info"
             type={contactMethod === "email" ? "email" : "tel"}
-            placeholder={
-              contactMethod === "email"
-                ? "Enter your email"
-                : "Enter your WhatsApp number"
-            }
+            placeholder={contactMethod === "email" ? "Enter your email" : ""}
             value={contactInfo}
             onChange={(e) => {
               setContactInfo(e.target.value);

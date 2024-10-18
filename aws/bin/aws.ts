@@ -13,7 +13,7 @@ console.log(
 );
 new FriendsLinksStack(
   app,
-  (process.env.ENVIRONMENT === "prod" ? "prod" : "dev") + "CheckMyHomeOnline",
+  (process.env.ENVIRONMENT === "prod" ? "prod" : "dev") + "FriendsReminders",
   process.env.ENVIRONMENT === "prod",
   {
     env: {

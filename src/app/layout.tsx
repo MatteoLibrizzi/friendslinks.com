@@ -5,8 +5,8 @@ import Footer from "@/components/ui/footer";
 import BasicLayour from "./basicLayout";
 
 export const metadata: Metadata = {
-  title: "CheckMyHomeOnline",
-  description: "Verify your Dream Home before Committing to it",
+  title: "Friends Reminders",
+  description: "Remember to text your loved ones",
 };
 
 export default function LandingLayout({
