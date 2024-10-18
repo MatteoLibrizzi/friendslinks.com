@@ -1,8 +1,9 @@
 
 import formData from "form-data"
 import Mailgun, { MailgunMessageData } from "mailgun.js"
-import { MAILGUN_API_KEY } from "../constants"
 import { IMailgunClient } from "mailgun.js/Interfaces"
+
+const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY || ''
 
 export abstract class EmailHandler {
     abstract send: (sendEmailInput: MailgunMessageData) => Promise<void>
