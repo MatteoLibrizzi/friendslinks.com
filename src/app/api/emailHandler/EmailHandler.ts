@@ -1,4 +1,4 @@
-"use server";
+
 import formData from "form-data"
 import Mailgun, { MailgunMessageData } from "mailgun.js"
 import { IMailgunClient } from "mailgun.js/Interfaces"
