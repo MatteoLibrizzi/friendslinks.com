@@ -1,4 +1,3 @@
-import { kv } from "@vercel/kv";
 import { KVRemindersRepository } from "../reporitory/Reminders";
 import { getNextReminder } from "../domain/getNextReminder";
 
