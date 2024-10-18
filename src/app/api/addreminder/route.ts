@@ -1,6 +1,9 @@
+import { MailGunEmailHandler } from "../emailHandler/EmailHandler";
 import { KVRemindersRepository } from "../reporitory/Reminders";
 import { v4 } from "uuid";
-import { mailHandler } from "../constants";
+// import { mailHandler } from "../constants";
+export const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY || ''
+export const mailHandler = new MailGunEmailHandler()
 
 export async function POST(request: Request) {
     const body = await request.json()
