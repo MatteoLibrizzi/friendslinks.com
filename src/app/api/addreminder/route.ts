@@ -1,4 +1,3 @@
-import { kv } from "@vercel/kv";
 import { KVRemindersRepository } from "../reporitory/Reminders";
 import { v4 } from "uuid";
 import { mailHandler } from "../constants";
@@ -25,5 +24,5 @@ export async function POST(request: Request) {
     })
 
 
-    return new Response("OK")
+    return new Response("OK", { status: 200 })
 }
