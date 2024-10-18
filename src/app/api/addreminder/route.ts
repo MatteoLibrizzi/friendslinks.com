@@ -1,5 +1,4 @@
-"use server";
-
+"use client";
 import { MailGunEmailHandler } from "../emailHandler/EmailHandler";
 import { KVRemindersRepository } from "../reporitory/Reminders";
 import { v4 } from "uuid";
