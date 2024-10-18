@@ -1,9 +1,15 @@
-"use client";
-
-import { MailGunEmailHandler } from "../emailHandler/EmailHandler";
+import formData from "form-data"
+import Mailgun, { MailgunMessageData } from "mailgun.js"
 import { KVRemindersRepository } from "../reporitory/Reminders";
 import { v4 } from "uuid";
-const mailHandler = new MailGunEmailHandler()
+
+const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY || ''
+const mailGun = new Mailgun(formData)
+const mailGunClient = mailGun.client({
+    username: 'api', key: MAILGUN_API_KEY, url: 'https://api.eu.mailgun.net'
+});
+const mailGunDomain = 'mail.friendsremind.me'
+
 
 export async function POST(request: Request) {
     const body = await request.json()
@@ -19,7 +25,7 @@ export async function POST(request: Request) {
         id: v4()
     })
 
-    await mailHandler.send({
+    await mailGunClient.messages.create(mailGunDomain, {
         from: "admin@mail.friendsremind.me",
         to: ["librizzimatteo.ml@gmail.com"],
         subject: "New reminder",
