@@ -1,3 +1,4 @@
+"use client";
 
 import { MailGunEmailHandler } from "../emailHandler/EmailHandler";
 import { KVRemindersRepository } from "../reporitory/Reminders";
