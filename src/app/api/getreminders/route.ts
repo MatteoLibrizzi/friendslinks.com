@@ -1,3 +1,5 @@
+"use server";
+
 import { KVRemindersRepository } from "../reporitory/Reminders";
 import { getNextReminder } from "../domain/getNextReminder";
 
