@@ -70,9 +70,12 @@ export class KVRemindersRepository extends RemindersRepository {
     }
 
     deleteReminder: (reminderId: string) => Promise<void> = async (reminderId) => {
+        const quickReminder = await this.getReminderById(reminderId)
+        if (!quickReminder.active) {
+            return
+        }
+        
         const contactInfo = await kv.get(`reminder:${reminderId}`)
-
-        console.log("Contactinfo ", contactInfo)
 
         if (!contactInfo) {
             throw new Error("Reminder not found")

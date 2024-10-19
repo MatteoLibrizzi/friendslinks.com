@@ -42,11 +42,11 @@ export default function RemoveReminder({ params }: any) {
       {error && !loading && (
         <>
           <h1 className="text-3xl font-bold  mb-6">
-            Failed to Remove Reminder ❌
+            Something went wrong while removing your reminder ❌
           </h1>
           <a href="mailto:librizzimatteo.ml@gmail.com">
             <Button className="bg-[#FF5E6C] hover:bg-[#FF7A85] text-white">
-              Contact Us
+              Please Contact Us
             </Button>
           </a>
         </>
