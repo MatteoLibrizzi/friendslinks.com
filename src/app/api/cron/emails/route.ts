@@ -47,16 +47,15 @@ export async function GET(request: Request) {
     <strong>${reminder.frequencyInDays}</strong> 
     days, and today is the day!</p>
 
-  <!-- Call to action button styled with the theme color -->
-  <a href="sms:${reminder.friendName}" 
-     style="background-color: #FF5E6C; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;" 
-     target="_blank">
-    Text ${reminder.friendName ? reminder.friendName : "Your Friend"} Now
-  </a>
-
   <p>We hope this reminder helps you stay connected!</p>
   <p>Best regards,</p>
-  <p>The Reminder Team</p>
+  <p>The FriendsRemind.me Team</p>
+
+  <a href="https://www.friendsremind.me/removereminder/${reminder.id}" 
+     style="background-color: #FF5E6C; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;" 
+     target="_blank">
+    Remove Reminder
+  </a>
 </body>
 </html>
 
