@@ -16,14 +16,18 @@ export abstract class RemindersRepository {
     abstract getActiveRemindersByContactInfo: (contactInfo: string) => Promise<Reminder[]>;
     abstract getRemindersByContactInfo: (contactInfo: string) => Promise<Reminder[]>;
     abstract getReminderById: (reminderId: string) => Promise<Reminder>;
-    abstract getAllEmails: () => Promise<string[]>;
+    abstract getAllContacts: () => Promise<string[]>;
     abstract deleteReminder: (reminderId: string) => Promise<void>;
 }
 
 export class KVRemindersRepository extends RemindersRepository {
     addReminder = async (reminder: Reminder): Promise<void> => {
         await kv.lpush(`reminders:${reminder.contactInfo}`, reminder)
-        await kv.lpush(`reminders:contacts`, reminder.contactInfo)
+
+        const isNewContact = await kv.lpos(`reminders:contacts`, reminder.contactInfo) === null
+        if (isNewContact) {
+            await kv.lpush(`reminders:contacts`, reminder.contactInfo)
+        }
         await kv.set(`reminder:${reminder.id}`, reminder.contactInfo)
 
         console.log(`Added reminder to reminders:${reminder.contactInfo}, new list length: `, await kv.llen(`reminders:${reminder.contactInfo}`))
@@ -59,10 +63,10 @@ export class KVRemindersRepository extends RemindersRepository {
         return reminders ?? []
     }
 
-    getAllEmails: () => Promise<string[]> = async () => {
-        const emails = await kv.lrange(`reminders:contacts`, 0, - 1) as any[]
+    getAllContacts: () => Promise<string[]> = async () => {
+        const contacts = await kv.lrange(`reminders:contacts`, 0, - 1) as any[]
 
-        return emails ?? []
+        return contacts ?? []
     }
 
     deleteReminder: (reminderId: string) => Promise<void> = async (reminderId) => {

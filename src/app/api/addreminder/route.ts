@@ -8,7 +8,8 @@ export async function POST(request: Request) {
 
     const id = v4()
     const remindersRepo = new KVRemindersRepository()
-    remindersRepo.addReminder({
+
+    const reminder = {
         contactInfo: body.contactInfo,
         notificationMethod: body.notificationMethod,
         frequencyInDays: body.frequencyInDays,
@@ -16,13 +17,14 @@ export async function POST(request: Request) {
         friendName: body.friendName,
         id,
         active: true
-    })
+    }
+    remindersRepo.addReminder(reminder)
 
     await mailHandler.send({
         from: "Reminders Creator <no-reply@mail.friendsremind.me>",
         to: ["librizzimatteo.ml@gmail.com"],
         subject: "New reminder",
-        text: "New reminder for " + body.contactInfo + " " + body.notificationMethod + " " + body.frequencyInDays + " " + body.startDateTimestamp + " " + body.friendName + " " + body.id,
+        text: "New reminder for " + JSON.stringify(reminder),
     })
 
     if (body.notificationMethod === "email") {

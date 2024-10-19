@@ -1,5 +1,5 @@
 import { KVRemindersRepository } from "../../reporitory/Reminders";
-import { getNextReminder } from "../../domain/getNextReminder";
+import { getNextReminderTimestamp } from "../../domain/getNextReminder";
 
 export async function POST(request: Request) {
     const body = await request.json()

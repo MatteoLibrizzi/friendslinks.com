@@ -1,5 +1,5 @@
 import { KVRemindersRepository } from "../reporitory/Reminders";
-import { getNextReminder } from "../domain/getNextReminder";
+import { getNextReminderTimestamp } from "../domain/getNextReminder";
 
 export async function POST(request: Request) {
     const body = await request.json()
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const reminders = remindersByContactInfo.map((reminder) => {
         return {
             ...reminder,
-            nextReminderTimestamp: getNextReminder(reminder.startDateTimestamp, reminder.frequencyInDays)
+            nextReminderTimestamp: getNextReminderTimestamp(reminder.startDateTimestamp, reminder.frequencyInDays)
         }
     })
 
