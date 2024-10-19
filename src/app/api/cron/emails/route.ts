@@ -25,7 +25,7 @@ export async function GET(request: Request) {
 
         if (todayDate === nextReminderDate) {
             // send reminder
-            console.log("Sending reminder")
+            console.log("Sending reminder to ", reminder.contactInfo, " with id: ", reminder.id)
             await mailHandler.send({
                 to: reminder.contactInfo,
                 from: "FriendsRemind.me <no-reply@mail.friendsremind.me>",
@@ -56,9 +56,13 @@ export async function GET(request: Request) {
      target="_blank">
     Remove Reminder
   </a>
+  <a href="https://www.friendsremind.me/reminders" 
+     style="background-color: #FF5E6C; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;" 
+     target="_blank">
+    Check Active Reminders
+  </a>
 </body>
 </html>
-
                 `
             })
         }

@@ -29,8 +29,6 @@ export class KVRemindersRepository extends RemindersRepository {
             await kv.lpush(`reminders:contacts`, reminder.contactInfo)
         }
         await kv.set(`reminder:${reminder.id}`, reminder.contactInfo)
-
-        console.log(`Added reminder to reminders:${reminder.contactInfo}, new list length: `, await kv.llen(`reminders:${reminder.contactInfo}`))
     }
 
     getReminderById: (reminderId: string) => Promise<Reminder> = async (reminderId) => {
@@ -82,11 +80,10 @@ export class KVRemindersRepository extends RemindersRepository {
         }
 
         const reminders = await kv.lrange(`reminders:${contactInfo}`, 0, -1) as any[]
-        console.log('Reminders ', reminders)
+
         const reminderIndex = reminders.findIndex((reminder) => reminder.id === reminderId)
         const reminder = reminders[reminderIndex]
 
-        console.log("Reminder, index: ", reminder, reminderIndex)
         if (!reminder) {
             throw new Error("Reminder not found")
         }

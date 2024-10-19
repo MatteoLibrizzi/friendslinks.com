@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
 export default function RemoveReminder({ params }: any) {
-  console.log("Params", params);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 

@@ -2,7 +2,6 @@
 
 import { KVRemindersRepository } from "../reporitory/Reminders";
 
-// TODO Implement remove reminders based on id
 export async function POST(request: Request) {
     const body = await request.json()
 

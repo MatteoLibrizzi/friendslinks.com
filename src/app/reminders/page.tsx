@@ -22,7 +22,6 @@ export default function ReminderQuery() {
   const [isLoading, setIsLoading] = useState(false);
 
   const validateContact = (value: string) => {
-    console.log("Validate");
     if (contactMethod === "email") {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(value)) {
@@ -75,9 +74,6 @@ export default function ReminderQuery() {
       setReminders([]);
     }
   };
-
-  console.log(reminders);
-  // TODO finish this page
 
   return (
     <main className="container flex flex-col justify-center items-center mx-auto px-4 py-8">
