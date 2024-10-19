@@ -8,33 +8,87 @@ interface Reminder {
     frequencyInDays: number;
     startDateTimestamp: number;
     friendName: string;
+    active: boolean;
 }
 
 export abstract class RemindersRepository {
     abstract addReminder: (reminder: Reminder) => Promise<void>;
+    abstract getActiveRemindersByContactInfo: (contactInfo: string) => Promise<Reminder[]>;
     abstract getRemindersByContactInfo: (contactInfo: string) => Promise<Reminder[]>;
+    abstract getReminderById: (reminderId: string) => Promise<Reminder>;
     abstract getAllEmails: () => Promise<string[]>;
+    abstract deleteReminder: (reminderId: string) => Promise<void>;
 }
 
 export class KVRemindersRepository extends RemindersRepository {
     addReminder = async (reminder: Reminder): Promise<void> => {
         await kv.lpush(`reminders:${reminder.contactInfo}`, reminder)
         await kv.lpush(`reminders:contacts`, reminder.contactInfo)
+        await kv.set(`reminder:${reminder.id}`, reminder.contactInfo)
 
         console.log(`Added reminder to reminders:${reminder.contactInfo}, new list length: `, await kv.llen(`reminders:${reminder.contactInfo}`))
     }
-    // TODO clear db and add with new schema
+
+    getReminderById: (reminderId: string) => Promise<Reminder> = async (reminderId) => {
+        const contactInfo = await kv.get(`reminder:${reminderId}`)
+
+        if (!contactInfo) {
+            throw new Error("Reminder not found")
+        }
+
+        const reminders = await kv.lrange(`reminders:${contactInfo}`, 0, -1) as any[]
+        const reminder = reminders.find((reminder) => reminder.id === reminderId)
+
+        if (!reminder) {
+            throw new Error("Reminder not found")
+        }
+
+        return reminder
+    }
+
+    getActiveRemindersByContactInfo = async (contactInfo: string): Promise<Reminder[]> => {
+        const reminders = await kv.lrange(`reminders:${contactInfo}`, 0, - 1) as any[]
+
+        return reminders.filter(reminder => reminder.active) ?? []
+    }
+
+
     getRemindersByContactInfo = async (contactInfo: string): Promise<Reminder[]> => {
-        const numberOfReminders = await kv.llen(`reminders:${contactInfo}`)
-        const reminders = await kv.lrange(`reminders:${contactInfo}`, 0, numberOfReminders - 1) as any[]
+        const reminders = await kv.lrange(`reminders:${contactInfo}`, 0, - 1) as any[]
 
         return reminders ?? []
     }
 
     getAllEmails: () => Promise<string[]> = async () => {
-        const numberOfEmails = await kv.llen(`reminders:contacts`)
-        const emails = await kv.lrange(`reminders:contacts`, 0, numberOfEmails - 1) as any[]
+        const emails = await kv.lrange(`reminders:contacts`, 0, - 1) as any[]
 
         return emails ?? []
+    }
+
+    deleteReminder: (reminderId: string) => Promise<void> = async (reminderId) => {
+        const contactInfo = await kv.get(`reminder:${reminderId}`)
+
+        console.log("Contactinfo ", contactInfo)
+
+        if (!contactInfo) {
+            throw new Error("Reminder not found")
+        }
+
+        const reminders = await kv.lrange(`reminders:${contactInfo}`, 0, -1) as any[]
+        console.log('Reminders ', reminders)
+        const reminderIndex = reminders.findIndex((reminder) => reminder.id === reminderId)
+        const reminder = reminders[reminderIndex]
+
+        console.log("Reminder, index: ", reminder, reminderIndex)
+        if (!reminder) {
+            throw new Error("Reminder not found")
+        }
+
+        const inactiveReminder = {
+            ...reminder,
+            active: false
+        }
+
+        await kv.lset(`reminders:${contactInfo}`, reminderIndex, inactiveReminder)
     }
 }

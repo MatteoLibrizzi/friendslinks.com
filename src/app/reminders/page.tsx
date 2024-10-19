@@ -39,7 +39,7 @@ export default function ReminderQuery() {
     if (validateContact(contactInfo)) {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/getreminders", {
+        const response = await fetch("/api/getactivereminders", {
           method: "POST",
           body: JSON.stringify({ contactInfo }),
         });
@@ -55,6 +55,24 @@ export default function ReminderQuery() {
       } finally {
         setIsLoading(false);
       }
+    }
+  };
+
+  const removeReminder = async (reminderId: string) => {
+    try {
+      const response = await fetch("/api/removereminder", {
+        method: "POST",
+        body: JSON.stringify({ reminderId }),
+      });
+      if (response.ok) {
+        setReminders((prevReminders) =>
+          prevReminders.filter((reminder) => reminder.id !== reminderId)
+        );
+      } else {
+      }
+    } catch (error) {
+      console.error("Error fetching reminders:", error);
+      setReminders([]);
     }
   };
 
@@ -106,7 +124,6 @@ export default function ReminderQuery() {
         </div>
 
         <Button
-          type="submit"
           className="w-full bg-[#FF5E6C] hover:bg-[#FF7A85] text-white"
           disabled={isLoading}
           onClick={(e) => {
@@ -124,9 +141,17 @@ export default function ReminderQuery() {
           </h2>
           {reminders.map((reminder) => (
             <Card key={reminder.id}>
-              <CardHeader>
-                <CardTitle>{reminder.friendName}</CardTitle>
-                <CardDescription>Reminder Details:</CardDescription>
+              <CardHeader className="flex flex-row justify-between items-start">
+                <div>
+                  <CardTitle>{reminder.friendName}</CardTitle>
+                  <CardDescription>Reminder Details:</CardDescription>
+                </div>
+                <Button
+                  onClick={() => removeReminder(reminder.id)}
+                  className="bg-[#FF5E6C] hover:bg-[#FF7A85] text-white"
+                >
+                  Remove
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">

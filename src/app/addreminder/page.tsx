@@ -125,9 +125,14 @@ export default function AddReminder() {
 
   return (
     <main className="container flex flex-col justify-center items-center mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-[#FF5E6C] mb-6">
+      <h1 className="text-3xl font-bold text-[#FF5E6C] mb-2">
         Add New Reminder
       </h1>
+      <p className="mx-auto pb-4 max-w-[700px] text-gray-500 text-md text-center  dark:text-gray-400">
+        You will receive a periodic email, unsubscribe anytime with just{" "}
+        <strong>ONE</strong> click
+      </p>
+
       <div className="space-y-6 max-w-md">
         <div className="space-y-2">
           <Label htmlFor="notification-method">Notification Method</Label>
@@ -150,6 +155,7 @@ export default function AddReminder() {
             </div>
           </RadioGroup>
         </div>
+
         {notificationMethod === "email" && (
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
