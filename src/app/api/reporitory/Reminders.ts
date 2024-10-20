@@ -1,7 +1,7 @@
 import { kv } from "@vercel/kv";
 
 
-interface Reminder {
+export interface Reminder {
     id: string;
     notificationMethod: "email"
     contactInfo: string;
@@ -18,7 +18,7 @@ export abstract class RemindersRepository {
     abstract getRemindersByContactInfo: (contactInfo: string) => Promise<Reminder[]>;
     abstract getReminderById: (reminderId: string) => Promise<Reminder>;
     abstract getAllContacts: () => Promise<string[]>;
-    abstract deleteReminder: (reminderId: string) => Promise<void>;
+    abstract deactivateReminder: (reminderId: string) => Promise<void>;
 }
 
 export class KVRemindersRepository extends RemindersRepository {
@@ -68,12 +68,12 @@ export class KVRemindersRepository extends RemindersRepository {
         return contacts ?? []
     }
 
-    deleteReminder: (reminderId: string) => Promise<void> = async (reminderId) => {
+    deactivateReminder: (reminderId: string) => Promise<void> = async (reminderId) => {
         const quickReminder = await this.getReminderById(reminderId)
         if (!quickReminder.active) {
             return
         }
-        
+
         const contactInfo = await kv.get(`reminder:${reminderId}`)
 
         if (!contactInfo) {

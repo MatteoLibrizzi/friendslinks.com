@@ -12,7 +12,8 @@ export default function RemoveReminder({ params }: any) {
       setLoading(true);
       try {
         const response = await fetch(
-          `/api/removereminder/${params.reminderId}`
+          `/api/removereminder/${params.reminderId}`,
+          { method: "POST", body: JSON.stringify({}) }
         );
         if (response.ok) {
         } else {
