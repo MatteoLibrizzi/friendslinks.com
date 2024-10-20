@@ -14,11 +14,19 @@ import {
 } from "@/components/ui/card";
 import { Mail, Calendar, Clock, Flame } from "lucide-react";
 
+const getInputContactInfo = (params: any) => {
+  const contactInfoArr = params?.contactInfo;
+  if (!contactInfoArr || contactInfoArr.length === 0) {
+    return "";
+  }
+  const inputContactInfo = contactInfoArr[0] ?? "";
+  return decodeURIComponent(inputContactInfo);
+};
+
 export default function ReminderQuery({ params }: any) {
-  const inputContactInfo = params?.contactInfo[0] ?? "";
-  const decodedInputContactInfo = decodeURIComponent(inputContactInfo);
+  const inputContactInfo = getInputContactInfo(params);
+  const [contactInfo, setContactInfo] = useState(inputContactInfo);
   const [contactMethod, setContactMethod] = useState<"email">("email");
-  const [contactInfo, setContactInfo] = useState(decodedInputContactInfo);
   const [contactError, setContactError] = useState("");
   const [reminders, setReminders] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
