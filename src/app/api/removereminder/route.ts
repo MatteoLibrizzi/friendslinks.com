@@ -6,7 +6,8 @@ export async function POST(request: Request) {
     const body = await request.json()
 
     const remindersRepository = new KVRemindersRepository()
-
+    // TODO add concept of streak when the reminder is keps ✅
+    // TODO return success if reminder is already inactive
     try {
         await remindersRepository.deleteReminder(body.reminderId)
     } catch (e) {

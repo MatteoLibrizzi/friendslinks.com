@@ -14,10 +14,11 @@ export async function POST(request: Request) {
         frequencyInDays: body.frequencyInDays,
         startDateTimestamp: body.startDateTimestamp,
         friendName: body.friendName,
+        streakStartsSinceTimestamp: new Date().getTime(),
         id,
         active: true
     }
-    remindersRepo.addReminder(reminder)
+    await remindersRepo.addReminder(reminder)
 
     await mailHandler.send({
         from: "Reminders Creator <no-reply@mail.friendsremind.me>",

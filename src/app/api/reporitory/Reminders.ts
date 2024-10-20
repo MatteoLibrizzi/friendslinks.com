@@ -9,6 +9,7 @@ interface Reminder {
     startDateTimestamp: number;
     friendName: string;
     active: boolean;
+    streakStartsSinceTimestamp: number
 }
 
 export abstract class RemindersRepository {

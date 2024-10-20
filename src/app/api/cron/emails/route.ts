@@ -30,8 +30,9 @@ export async function GET(request: Request) {
                 to: reminder.contactInfo,
                 from: "FriendsRemind.me <no-reply@mail.friendsremind.me>",
                 subject: `Remember to text ${reminder.friendName}`,
+                // TODO make emails pretty
                 html: `
-                <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">

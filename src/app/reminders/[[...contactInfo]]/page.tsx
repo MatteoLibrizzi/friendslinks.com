@@ -12,11 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Mail, Calendar, Clock } from "lucide-react";
+import { Mail, Calendar, Clock, Flame } from "lucide-react";
 
-export default function ReminderQuery() {
+export default function ReminderQuery({ params }: any) {
+  const inputContactInfo = params?.contactInfo[0] ?? "";
+  const decodedInputContactInfo = decodeURIComponent(inputContactInfo);
   const [contactMethod, setContactMethod] = useState<"email">("email");
-  const [contactInfo, setContactInfo] = useState("");
+  const [contactInfo, setContactInfo] = useState(decodedInputContactInfo);
   const [contactError, setContactError] = useState("");
   const [reminders, setReminders] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,9 +40,9 @@ export default function ReminderQuery() {
     if (validateContact(contactInfo)) {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/getactivereminders", {
+        const response = await fetch("/api/getreminders", {
           method: "POST",
-          body: JSON.stringify({ contactInfo }),
+          body: JSON.stringify({ contactInfo, onlyActiveReminders: true }),
         });
         if (response.ok) {
           const data = await response.json();
@@ -170,6 +172,16 @@ export default function ReminderQuery() {
                         {new Date(
                           reminder.nextReminderTimestamp
                         ).toDateString()}
+                      </strong>
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <Flame className="mr-2 h-4 w-4" />
+                    <span>
+                      Streak:{" "}
+                      <strong>
+                        {reminder.streakInDays}{" "}
+                        {reminder.streakInDays === 1 ? "Day" : "Days"}
                       </strong>
                     </span>
                   </div>
