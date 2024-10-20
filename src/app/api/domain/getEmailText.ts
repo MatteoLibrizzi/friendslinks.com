@@ -57,8 +57,8 @@ export const getSignUpEmailHtml = ({ friendName, startDateTimestamp, frequencyIn
                             <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 30px;">
                                 <tr>
                                     <td align="center">
-                                    <a href="https://friendsremind.me/reminders/${contactInfo}" style="display: inline-block; background-color: #FF5E6C; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; margin-right: 10px;">View All Reminders</a>    
-                                    <a href="https://friendsremind.me/removereminder/${id}" style="display: inline-block; background-color: #333333; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-weight: bold;">Remove Reminder</a>
+                                    <a href="https://www.friendsremind.me/reminders/${contactInfo}" style="display: inline-block; background-color: #FF5E6C; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; margin-right: 10px;">View All Reminders</a>    
+                                    <a href="https://www.friendsremind.me/removereminder/${id}" style="display: inline-block; background-color: #333333; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-weight: bold;">Remove Reminder</a>
                                     </td>
                                 </tr>
                             </table>
