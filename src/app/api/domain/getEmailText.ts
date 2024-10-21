@@ -133,7 +133,7 @@ export const getReminderEmailHtml = ({ friendName, startDateTimestamp, frequency
                             <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 30px;">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://www.friendsremind.me/streakactive/${id}" style="display: inline-block; background-color: #FF5E6C; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 5px; font-weight: bold; font-size: 16px;">Mark as Complete</a>
+                                        <a href="https://www.friendsremind.me/addstreakpoint/${id}" style="display: inline-block; background-color: #FF5E6C; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 5px; font-weight: bold; font-size: 16px;">Mark as Complete</a>
                                     </td>
                                 </tr>
                             </table>
