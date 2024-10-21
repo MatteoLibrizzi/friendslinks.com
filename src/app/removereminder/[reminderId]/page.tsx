@@ -13,7 +13,7 @@ export default function RemoveReminder({ params }: any) {
       try {
         const response = await fetch(
           `/api/removereminder/${params.reminderId}`,
-          { method: "POST", body: JSON.stringify({}) }
+          { method: "DELETE" }
         );
         if (response.ok) {
         } else {

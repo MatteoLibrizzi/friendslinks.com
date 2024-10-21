@@ -1,13 +1,13 @@
 export const getNextReminderTimestamp = (startTimestamp: number, frequencyInDays: number): number => {
     const frequencyInMillis = frequencyInDays * 24 * 60 * 60 * 1000;
-    const currentTime = Date.now();
+    const currentTimeMinusOneDay = Date.now() - 24 * 60 * 60 * 1000
 
-    if (startTimestamp > currentTime) {
+    if (startTimestamp > currentTimeMinusOneDay) {
         return startTimestamp;
     }
 
     let nextReminder = startTimestamp;
-    while (nextReminder <= currentTime) {
+    while (nextReminder <= currentTimeMinusOneDay) {
         nextReminder += frequencyInMillis;
     }
 

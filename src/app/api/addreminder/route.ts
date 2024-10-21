@@ -15,9 +15,11 @@ export async function POST(request: Request) {
         frequencyInDays: body.frequencyInDays,
         startDateTimestamp: body.startDateTimestamp,
         friendName: body.friendName,
-        streakActiveSinceTimestamp: new Date().getTime(),
-        // TODO Add page and API for this
-        streakActive: true,
+        streakSinceTimestamp: new Date().getTime(),
+        streakTimestampsPoints: [new Date().getTime()],
+        // TODO Add page and API to maintain streak
+        // will add STREAKPOINT
+        // every day will look for items with old streakpoints and delete
         id,
         active: true
     }

@@ -1,26 +1,19 @@
 import { mailHandler } from "../../constants";
 import { getReminderEmailHtml } from "../../domain/getEmailText";
 import { getNextReminderTimestamp } from "../../domain/getNextReminder";
-import { KVRemindersRepository } from "../../reporitory/Reminders";
+import { DDBRemindersRepository } from "../../reporitory/Reminders";
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-    const remindersRepo = new KVRemindersRepository()
+    const remindersRepo = new DDBRemindersRepository()
 
-    const contacts = await remindersRepo.getAllContacts()
-    const uniqueContacts = [...new Set(contacts)]
-    const remindersByContacts = await Promise.all(uniqueContacts.map(async (contact) => {
-        const reminders = await remindersRepo.getActiveRemindersByContactInfo(contact)
-        return reminders
-    }))
-
-    const reminders = remindersByContacts.flat()
+    const reminders = await remindersRepo.getAllReminders()
 
     await Promise.all(reminders.map(async (reminder) => {
         const nextReminderTimestamp = getNextReminderTimestamp(reminder.startDateTimestamp, reminder.frequencyInDays)
-        const nextReminderDate = new Date(nextReminderTimestamp).toLocaleDateString()
-        const todayDate = new Date().toLocaleDateString()
+        const nextReminderDate = new Date(nextReminderTimestamp).toDateString()
+        const todayDate = new Date().toDateString()
 
         console.log('Comparing: ', todayDate, nextReminderDate)
 

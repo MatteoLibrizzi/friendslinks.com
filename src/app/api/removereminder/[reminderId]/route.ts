@@ -1,10 +1,10 @@
 
 
-import { KVRemindersRepository } from "../../reporitory/Reminders";
+import { DDBRemindersRepository } from "../../reporitory/Reminders";
 
-export async function POST(request: Request, { params }: any) {
+export async function DELETE(request: Request, { params }: any) {
 
-    const remindersRepository = new KVRemindersRepository()
+    const remindersRepository = new DDBRemindersRepository()
     try {
         const reminderId = params.reminderId
         if (!reminderId) {

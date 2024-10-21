@@ -2,10 +2,10 @@ import { Reminder } from "../reporitory/Reminders"
 import { countDays } from "./getNextReminder"
 
 
-export const getSignUpEmailHtml = ({ friendName, startDateTimestamp, frequencyInDays, contactInfo, id, streakActiveSinceTimestamp: streakStartsSinceTimestamp }: Reminder) => {
+export const getSignUpEmailHtml = ({ friendName, startDateTimestamp, frequencyInDays, contactInfo, id, streakSinceTimestamp: streakSince }: Reminder) => {
     const friendNameOrDefault = friendName ?? "Your Friend"
     const daysFrequencyString = `${frequencyInDays} ${frequencyInDays === 1 ? "day" : "days"}`
-    const streakDays = countDays(streakStartsSinceTimestamp, new Date().getTime()) ?? 0
+    const streakDays = streakSince === null ? 0 : countDays(streakSince, new Date().getTime()) ?? 0
     const streakDaysString = `${streakDays} ${streakDays === 1 ? "day" : "days"}`
     return `
 <!DOCTYPE html>
@@ -85,10 +85,10 @@ export const getLastContactTimestamp = (frequencyInDays: number) => {
     return dateOfLastContact
 }
 
-export const getReminderEmailHtml = ({ friendName, startDateTimestamp, frequencyInDays, contactInfo, id, streakActiveSinceTimestamp: streakStartsSinceTimestamp }: Reminder) => {
+export const getReminderEmailHtml = ({ friendName, startDateTimestamp, frequencyInDays, contactInfo, id, streakSinceTimestamp: streakSince }: Reminder) => {
     const friendNameOrDefault = friendName ?? "Your Friend"
     const daysFrequencyString = `${frequencyInDays} ${frequencyInDays === 1 ? "day" : "days"}`
-    const streakDays = countDays(streakStartsSinceTimestamp, new Date().getTime())
+    const streakDays = streakSince === null ? 0 : countDays(streakSince, new Date().getTime())
     const streakDaysString = `${streakDays} ${streakDays === 1 ? "day" : "days"}`
 
     const dateOfLastContact = new Date(getLastContactTimestamp(frequencyInDays)).toDateString()
@@ -113,7 +113,7 @@ export const getReminderEmailHtml = ({ friendName, startDateTimestamp, frequency
                     <tr>
                         <td style="padding: 30px;">
                             <p style="margin-bottom: 20px;">Hello there!</p>
-                            <p style="margin-bottom: 20px;">It's time to reach out to your friend Sarah Johnson. Keeping in touch is important, and you're doing great!</p>
+                            <p style="margin-bottom: 20px;">It's time to reach out to your friend ${friendNameOrDefault}. Keeping in touch is important, and you're doing great!</p>
                             <table cellpadding="10" cellspacing="0" border="0" width="100%" style="background-color: #f9f9f9; border-radius: 8px; margin-bottom: 20px;">
                                 <tr>
                                     <td width="50%" style="font-weight: bold;">Current Streak:</td>
@@ -129,7 +129,7 @@ export const getReminderEmailHtml = ({ friendName, startDateTimestamp, frequency
                                 </tr>
                             </table>
                             <p style="margin-bottom: 20px;">Your consistent effort in maintaining this friendship is commendable. Keep it up!</p>
-                            <p style="margin-bottom: 30px;">Once you've texted Sarah, don't forget to mark this reminder as complete to maintain your streak.</p>
+                            <p style="margin-bottom: 30px;">Once you've texted ${friendNameOrDefault}, don't forget to mark this reminder as complete to maintain your streak.</p>
                             <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 30px;">
                                 <tr>
                                     <td align="center">

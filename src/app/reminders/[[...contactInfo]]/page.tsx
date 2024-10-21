@@ -48,10 +48,9 @@ export default function ReminderQuery({ params }: any) {
     if (validateContact(contactInfo)) {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/getreminders", {
-          method: "POST",
-          body: JSON.stringify({ contactInfo, onlyActiveReminders: true }),
-        });
+        const response = await fetch(
+          `/api/getRemindersByContactInfo/${contactInfo}/?onlyActiveReminders=true`
+        );
         if (response.ok) {
           const data = await response.json();
           setReminders(data.reminders);
@@ -69,9 +68,8 @@ export default function ReminderQuery({ params }: any) {
 
   const removeReminder = async (reminderId: string) => {
     try {
-      const response = await fetch("/api/removereminder", {
-        method: "POST",
-        body: JSON.stringify({ reminderId }),
+      const response = await fetch(`/api/removereminder/${reminderId}`, {
+        method: "DELETE",
       });
       if (response.ok) {
         setReminders((prevReminders) =>
