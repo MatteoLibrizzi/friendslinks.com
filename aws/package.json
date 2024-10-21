@@ -10,7 +10,7 @@
     "test": "jest",
     "cdk": "cdk",
     "publish": "tsc && cdk synth && cdk bootstrap && cdk deploy",
-    "buildNDeployDev": "jest && tsc && ENVIRONMENT=dev cdk deploy --profile PersonalDev",
+    "buildNDeployDev": "jest && tsc && ENVIRONMENT=dev cdk deploy",
     "buildNDeployProd": "jest && tsc && ENVIRONMENT=prod cdk deploy"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { KVRemindersRepository, Reminder } from "../reporitory/Reminders";
+import { DDBRemindersRepository, Reminder } from "../reporitory/Reminders";
 import { v4 } from "uuid";
 import { mailHandler } from "../constants";
 import { getSignUpEmailHtml } from "../domain/getEmailText";
@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const body = await request.json()
 
     const id = v4()
-    const remindersRepo = new KVRemindersRepository()
+    const remindersRepo = new DDBRemindersRepository()
 
     const reminder: Reminder = {
         contactInfo: body.contactInfo,

@@ -23,10 +23,39 @@ import { LambdaIntegration, LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 export class FriendsLinksStack extends cdk.Stack {
 	prod: boolean
 
+	// OPERATIONS ON Streak:
+    // SET streak as active
+    // SET streak as inactive on the day after
+    // GET days of streak
+    // GET days since last message (last streak datapoint)
+	createDDBReminderTable = () => {
+		const remindersTable = new dynamodb.Table(this, 'RemindersTable', {
+			partitionKey: {
+				name: 'id',
+				type: dynamodb.AttributeType.STRING,
+			},
+			sortKey: {
+				name: 'data',
+				// DATA#{contactInfo}
+				// STREAKSINCE#{dateSince}
+				// STREAKPOINT#{date}
+				
+				// NEXT#{date} TODO add this
+				type: dynamodb.AttributeType.STRING,
+			},
+			billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+		})
+		// probably add gsi
+
+		return remindersTable
+	}
+
 
 	constructor(scope: Construct, id: string, prod: boolean, props?: cdk.StackProps) {
 		super(scope, id, props)
 
 		this.prod = prod;
+
+		this.createDDBReminderTable()
 	}
 }
