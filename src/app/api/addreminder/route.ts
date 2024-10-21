@@ -1,4 +1,4 @@
-import { KVRemindersRepository } from "../reporitory/Reminders";
+import { KVRemindersRepository, Reminder } from "../reporitory/Reminders";
 import { v4 } from "uuid";
 import { mailHandler } from "../constants";
 import { getSignUpEmailHtml } from "../domain/getEmailText";
@@ -9,13 +9,15 @@ export async function POST(request: Request) {
     const id = v4()
     const remindersRepo = new KVRemindersRepository()
 
-    const reminder = {
+    const reminder: Reminder = {
         contactInfo: body.contactInfo,
         notificationMethod: body.notificationMethod,
         frequencyInDays: body.frequencyInDays,
         startDateTimestamp: body.startDateTimestamp,
         friendName: body.friendName,
-        streakStartsSinceTimestamp: new Date().getTime(),
+        streakActiveSinceTimestamp: new Date().getTime(),
+        // TODO Add page and API for this
+        streakActive: true,
         id,
         active: true
     }

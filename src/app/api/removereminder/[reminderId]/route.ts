@@ -5,7 +5,6 @@ import { KVRemindersRepository } from "../../reporitory/Reminders";
 export async function POST(request: Request, { params }: any) {
 
     const remindersRepository = new KVRemindersRepository()
-    // TODO return success if reminder is already inactive
     try {
         const reminderId = params.reminderId
         if (!reminderId) {

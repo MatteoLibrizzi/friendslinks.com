@@ -9,7 +9,8 @@ export interface Reminder {
     startDateTimestamp: number;
     friendName: string;
     active: boolean;
-    streakStartsSinceTimestamp: number
+    streakActiveSinceTimestamp: number
+    streakActive: boolean // modified every day by cronjob for day-1
 }
 
 export abstract class RemindersRepository {
@@ -19,9 +20,21 @@ export abstract class RemindersRepository {
     abstract getReminderById: (reminderId: string) => Promise<Reminder>;
     abstract getAllContacts: () => Promise<string[]>;
     abstract deactivateReminder: (reminderId: string) => Promise<void>;
+    abstract reactivateReminder: (reminderId: string) => Promise<void>;
+    abstract setStreakInactive: (reminderId: string) => Promise<void>;
+    abstract setStreakActiveSinceTimestamp: (reminderId: string, streakActiveSinceTimestamp: number) => Promise<void>;
 }
 
 export class KVRemindersRepository extends RemindersRepository {
+    reactivateReminder: (reminderId: string) => Promise<void> = async () => { throw new Error("Method not implemented.") }
+    setStreakInactive: (reminderId: string) => Promise<void> = async () => {
+        throw new Error("Method not implemented.")
+        // TODO implement
+    }
+    setStreakActiveSinceTimestamp: (reminderId: string, streakActiveSinceTimestamp: number) => Promise<void> = async () => {
+        throw new Error("Method not implemented.")
+        // TODO Implement
+    }
     addReminder = async (reminder: Reminder): Promise<void> => {
         await kv.lpush(`reminders:${reminder.contactInfo}`, reminder)
 

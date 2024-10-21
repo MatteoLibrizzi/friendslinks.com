@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         const decoratedReminder = {
             ...reminder,
             nextReminderTimestamp: getNextReminderTimestamp(reminder.startDateTimestamp, reminder.frequencyInDays),
-            streakInDays: countDays(reminder.streakStartsSinceTimestamp ?? new Date().getTime(), new Date().getTime())
+            streakInDays: countDays(reminder.streakActiveSinceTimestamp ?? new Date().getTime(), new Date().getTime())
         }
         return decoratedReminder
     })
