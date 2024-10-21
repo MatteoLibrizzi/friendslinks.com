@@ -35,11 +35,11 @@ export class FriendsLinksStack extends cdk.Stack {
 				type: dynamodb.AttributeType.STRING,
 			},
 			sortKey: {
-				name: 'data',
+				name: 'reminderSK',
 				// DATA#{contactInfo}
 				// STREAKSINCE#{dateSince}
 				// STREAKPOINT#{date}
-				
+
 				// NEXT#{date} TODO add this
 				type: dynamodb.AttributeType.STRING,
 			},
