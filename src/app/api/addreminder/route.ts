@@ -17,9 +17,6 @@ export async function POST(request: Request) {
         friendName: body.friendName,
         streakSinceTimestamp: new Date().getTime(),
         streakTimestampsPoints: [new Date().getTime()],
-        // TODO Add page and API to maintain streak
-        // will add STREAKPOINT
-        // every day will look for items with old streakpoints and delete
         id,
         active: true
     }

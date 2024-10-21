@@ -129,6 +129,7 @@ export class KVRemindersRepository extends RemindersRepository {
 }
 
 
+// TODO check this for mistakes while you were sleep deprived
 export class DDBRemindersRepository extends RemindersRepository {
     remindersTableName: string
     constructor() {
@@ -229,39 +230,9 @@ export class DDBRemindersRepository extends RemindersRepository {
             // Unmarshall the reminder item
             const reminder = unmarshall(reminderResult.Items[0]) as Reminder;
 
-            // Step 2: Get the associated STREAK items (if any)
-            const streakParams = {
-                TableName: this.remindersTableName,
-                KeyConditionExpression: "#id = :id AND begins_with(#data, :streakPrefix)",
-                ExpressionAttributeNames: {
-                    "#id": "id",
-                    "#data": "data",
-                },
-                ExpressionAttributeValues: marshall({
-                    ":id": reminderId,
-                    ":streakPrefix": "STREAK", // Retrieve STREAK items
-                }),
-            };
-
-            const streakCommand = new QueryCommand(streakParams);
-            const streakResult = await DDB_CLIENT.send(streakCommand);
-
-            // Initialize streak data
-            reminder.streakSinceTimestamp = null;
-            reminder.streakTimestampsPoints = [];
-
-            // Process STREAK items
-            if (streakResult.Items) {
-                for (const item of streakResult.Items) {
-                    const unmarshalledItem = unmarshall(item);
-                    if (unmarshalledItem.data.startsWith("STREAKSINCE#")) {
-                        const streakSinceTimestamp = Number(unmarshalledItem.data.split("#")[1]) ?? null
-                        reminder.streakSinceTimestamp = streakSinceTimestamp
-                    } else if (unmarshalledItem.data.startsWith("STREAKPOINT#")) {
-                        reminder.streakTimestampsPoints.push(unmarshalledItem.timestamp);
-                    }
-                }
-            }
+            const { streakSinceTimestamp, streakTimestampsPoints } = await this.getStreakDataForReminder(reminder.id)
+            reminder.streakSinceTimestamp = streakSinceTimestamp
+            reminder.streakTimestampsPoints = streakTimestampsPoints
 
             return reminder;
         } catch (err) {
@@ -288,7 +259,12 @@ export class DDBRemindersRepository extends RemindersRepository {
         try {
             const result = await DDB_CLIENT.send(command);
             const reminders = result.Items?.map(item => unmarshall(item) as Reminder) || [];
-            return reminders.filter(reminder => reminder.active);
+            return await Promise.all(reminders.filter(reminder => reminder.active).map(async reminder => {
+                const { streakSinceTimestamp, streakTimestampsPoints } = await this.getStreakDataForReminder(reminder.id)
+                reminder.streakSinceTimestamp = streakSinceTimestamp
+                reminder.streakTimestampsPoints = streakTimestampsPoints
+                return reminder
+            }))
         } catch (err) {
             console.error("Error getting active reminders by contactInfo:", err);
             throw err;
@@ -311,7 +287,15 @@ export class DDBRemindersRepository extends RemindersRepository {
         const command = new ScanCommand(params);
         try {
             const result = await DDB_CLIENT.send(command);
-            return result.Items?.map(item => unmarshall(item).reminder as Reminder) || [];
+            const reminders = result.Items?.map(item => unmarshall(item).reminder as Reminder) || [];
+
+            return await Promise.all(reminders.map(async reminder => {
+                const { streakSinceTimestamp, streakTimestampsPoints } = await this.getStreakDataForReminder(reminder.id)
+                reminder.streakSinceTimestamp = streakSinceTimestamp
+                reminder.streakTimestampsPoints = streakTimestampsPoints
+                return reminder
+
+            }))
         } catch (err) {
             console.error("Error getting reminders by contact info:", err);
             throw err;
@@ -411,6 +395,7 @@ export class DDBRemindersRepository extends RemindersRepository {
         }
     };
 
+    // TODO use this in cron job for expired ones
     setStreakInactive: (reminderId: string) => Promise<void> = async (reminderId) => {
         // Assuming you want to remove the 'STREAKSINCE#{dateSince}' item from DynamoDB
         const params = {
@@ -437,8 +422,8 @@ export class DDBRemindersRepository extends RemindersRepository {
         }
     };
 
+    // TODO use this when is inactive and begings again (make it idempotent so you can use it anyway)
     setStreakActiveSinceTimestamp: (reminderId: string, streakSinceTimestamp: number) => Promise<void> = async (reminderId, streakSinceTimestamp) => {
-        // Format the date as a string to append in the sort key (e.g., "STREAKSINCE#2023-10-12")
         const params = {
             TableName: this.remindersTableName,
             Item: marshall({
@@ -463,6 +448,7 @@ export class DDBRemindersRepository extends RemindersRepository {
         }
     };
 
+    // TODO modify repo to work with operations on reminder, encapsulate streak object
     addStreakPoint: (reminderId: string, timestamp: number) => Promise<void> = async (reminderId, timestamp) => {
         const params = {
             TableName: this.remindersTableName,
@@ -483,7 +469,6 @@ export class DDBRemindersRepository extends RemindersRepository {
             throw err;
         }
     };
-
 
     getAllRemindersGroupedByContactInfo = async (): Promise<{ [contactInfo: string]: Reminder[] }> => {
         // Step 1: Scan for items with SK starting with DATA
@@ -534,9 +519,7 @@ export class DDBRemindersRepository extends RemindersRepository {
         }
     };
 
-    // Example method to fetch streak data (you should implement this)
     private getStreakDataForReminder = async (reminderId: string) => {
-        // Retrieve streak data based on the reminderId
         const streakParams = {
             TableName: this.remindersTableName,
             KeyConditionExpression: "#id = :id AND begins_with(#data, :streakPrefix)",
