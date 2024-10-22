@@ -11,12 +11,12 @@ export async function GET(request: Request) {
 
     const reminders = await remindersRepo.getAllReminders()
 
-    await Promise.all(reminders.map(async (reminder) => {
+    await Promise.all(reminders.filter(reminder => reminder.active).map(async (reminder) => {
         const nextReminderTimestamp = getNextReminderTimestamp(reminder.startDateTimestamp, reminder.frequencyInDays)
         const nextReminderDate = new Date(nextReminderTimestamp).toDateString()
         const todayDate = new Date().toDateString()
 
-        console.log('Today: ', todayDate, "\nNextReminder: ", nextReminderDate)
+        console.log('Today: ', todayDate, "\nNextReminder: ", nextReminderDate, "\n")
 
         if (todayDate === nextReminderDate) {
             // send reminder

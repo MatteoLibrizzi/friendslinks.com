@@ -133,7 +133,7 @@ export class DDBRemindersRepository extends RemindersRepository {
     remindersTableName: string
     constructor() {
         super()
-        this.remindersTableName = "devFriendsReminders-RemindersTableF916C7DB-1DO12WPVFHAI9"
+        this.remindersTableName = process.env.DDB_REMINDERS_TABLE_NAME || ""
     }
 
 
@@ -414,7 +414,7 @@ export class DDBRemindersRepository extends RemindersRepository {
         try {
             console.log("Sending DeleteItemCommand to remove streak...");
             await DDB_CLIENT.send(command);
-            console.log("Streak removed successfully");
+            console.log("Streak removed successfully for reminder: ", reminderId);
         } catch (err) {
             console.error("Error setting streak inactive:", err);
             throw err;
