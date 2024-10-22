@@ -129,7 +129,6 @@ export class KVRemindersRepository extends RemindersRepository {
 }
 
 
-// TODO check this for mistakes while you were sleep deprived
 export class DDBRemindersRepository extends RemindersRepository {
     remindersTableName: string
     constructor() {

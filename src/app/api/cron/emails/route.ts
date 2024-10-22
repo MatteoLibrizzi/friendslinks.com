@@ -6,8 +6,6 @@ import { DDBRemindersRepository } from "../../reporitory/Reminders";
 export const dynamic = 'force-dynamic';
 
 
-// TODO
-// every day  look for items with old streakpoints and delete
 export async function GET(request: Request) {
     const remindersRepo = new DDBRemindersRepository()
 
