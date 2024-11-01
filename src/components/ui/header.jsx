@@ -27,35 +27,43 @@ export default function Header() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
-            <Link href="/" prefetch={false}>
-              <HeartHandshake className="h-6 w-6 text-[#FF5E6C]" />
-              <span className="sr-only">FriendsRemind.me</span>
-            </Link>
+            <SheetTrigger asChild>
+              <Link href="/" prefetch={false}>
+                <HeartHandshake className="h-6 w-6 text-[#FF5E6C]" />
+                <span className="sr-only">FriendsRemind.me</span>
+              </Link>
+            </SheetTrigger>
             <div className="grid gap-2 py-6">
-              <Link
-                href="/"
-                className="flex w-full items-center  justify-between py-2 text-lg font-semibold text-[#FF5E6C]"
-                prefetch={false}
-              >
-                Home&nbsp;&nbsp;
-                <HomeIcon className="ml-1 h-6 w-6" />
-              </Link>
-              <Link
-                href="/reminders"
-                className="flex w-full items-center justify-between py-2 text-lg font-semibold text-[#FF5E6C]"
-                prefetch={false}
-              >
-                My Reminders&nbsp;&nbsp;
-                <MapPin className="ml-1 h-6 w-6" />
-              </Link>
-              <Link
-                href="/addreminder"
-                className="flex w-full items-center  justify-between py-2 text-lg font-semibold text-[#FF5E6C]"
-                prefetch={false}
-              >
-                Add Reminder&nbsp;&nbsp;
-                <UserPlus className="ml-1 h-6 w-6" />
-              </Link>
+              <SheetTrigger asChild>
+                <Link
+                  href="/"
+                  className="flex w-full items-center  justify-between py-2 text-lg font-semibold text-[#FF5E6C]"
+                  prefetch={false}
+                >
+                  Home&nbsp;&nbsp;
+                  <HomeIcon className="ml-1 h-6 w-6" />
+                </Link>
+              </SheetTrigger>
+              <SheetTrigger asChild>
+                <Link
+                  href="/reminders"
+                  className="flex w-full items-center justify-between py-2 text-lg font-semibold text-[#FF5E6C]"
+                  prefetch={false}
+                >
+                  My Reminders&nbsp;&nbsp;
+                  <MapPin className="ml-1 h-6 w-6" />
+                </Link>
+              </SheetTrigger>
+              <SheetTrigger asChild>
+                <Link
+                  href="/addreminder"
+                  className="flex w-full items-center  justify-between py-2 text-lg font-semibold text-[#FF5E6C]"
+                  prefetch={false}
+                >
+                  Add Reminder&nbsp;&nbsp;
+                  <UserPlus className="ml-1 h-6 w-6" />
+                </Link>
+              </SheetTrigger>
             </div>
           </SheetContent>
         </Sheet>
