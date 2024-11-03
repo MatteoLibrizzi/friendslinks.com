@@ -568,23 +568,21 @@ export class DDBRemindersRepository extends RemindersRepository {
         const streakCommand = new QueryCommand(streakParams);
         const streakResult = await DDB_CLIENT.send(streakCommand);
 
-        const streakData = {
-            streakSinceTimestamp: null,
-            streakTimestampsPoints: [] as number[],
-        };
+        const streakTimestampsPoints = []
+        let streakSinceTimestamp = new Date().getTime()
 
         if (streakResult.Items) {
             for (const item of streakResult.Items) {
                 const unmarshalledItem = unmarshall(item);
                 if (unmarshalledItem.reminderSK.startsWith("STREAKSINCE")) {
-                    streakData.streakSinceTimestamp = unmarshalledItem.streakSinceTimestamp; // Assuming this is the correct field
+                    streakSinceTimestamp = unmarshalledItem.streakSinceTimestamp; // Assuming this is the correct field
                 } else if (unmarshalledItem.reminderSK.startsWith("STREAKPOINT#")) {
-                    streakData.streakTimestampsPoints.push(unmarshalledItem.timestamp); // Collect timestamps
+                    streakTimestampsPoints.push(unmarshalledItem.timestamp); // Collect timestamps
                 }
             }
         }
 
-        return streakData; // Return the streak reminderSK
+        return { streakSinceTimestamp, streakTimestampsPoints }; // Return the streak reminderSK
     };
 
     getAllReminders = async (): Promise<Reminder[]> => {
