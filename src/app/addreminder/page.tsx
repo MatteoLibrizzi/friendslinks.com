@@ -21,11 +21,12 @@ import { CalendarIcon, Mail, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 
 const frequenciesToDays: any = {
-  Daily: 1,
   "Every 3 days": 3,
   Weekly: 7,
   Monthly: 30,
   Quarterly: 90,
+  "Every Semester": 182,
+  Yearly: 365,
 };
 
 export default function AddReminder() {
