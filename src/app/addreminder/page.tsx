@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { hasCookie, setCookie, getCookie } from "cookies-next";
 import {
   Select,
   SelectContent,
@@ -11,14 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon, Mail, MessageSquare } from "lucide-react";
-import { format } from "date-fns";
+import { Mail } from "lucide-react";
+import { addDays } from "date-fns";
+import AdvancedOptions from "./AdvancedOptions";
 
 const frequenciesToDays: any = {
   "Every 3 days": 3,
@@ -34,7 +30,9 @@ export default function AddReminder() {
     useState<"email">("email");
   const [friendName, setFriendName] = useState<string>("");
   const [selectedFrequency, setSelectedFrequency] = useState<string>("Weekly");
-  const [startDate, setStartDate] = useState<Date>();
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    addDays(new Date(), 1)
+  );
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [friendNameError, setFriendNameError] = useState("");
@@ -44,6 +42,21 @@ export default function AddReminder() {
     useState("Create Reminder");
   const [creationButtonDisabled, setCreationButtonDisabled] = useState(false);
 
+  useEffect(() => {
+    const setEmailCookie = async () => {
+      if (!(await hasCookie("email"))) {
+        return;
+      }
+      const emailInCookie = await getCookie("email");
+      if (!emailInCookie) {
+        return;
+      }
+      setEmail(emailInCookie.valueOf());
+    };
+
+    setEmailCookie();
+  }, []);
+
   const clearForm = () => {
     setFriendName("");
     setEmail("");
@@ -51,6 +64,7 @@ export default function AddReminder() {
     setFriendNameError("");
     setFrequencyError("");
     setStartDateError("");
+    setStartDate(addDays(new Date(), 1));
   };
 
   const validateEmail = (email: string) => {
@@ -63,8 +77,13 @@ export default function AddReminder() {
     return true;
   };
 
+  const storeEmainInCookie = () => {
+    setCookie("email", email, {});
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     if (validateForm()) {
+      storeEmainInCookie();
       setCreationButtonDisabled(true);
       setCreationButtonMessage("Creating Reminder...");
       const frequencyInDays = frequenciesToDays[selectedFrequency as any];
@@ -210,38 +229,11 @@ export default function AddReminder() {
             <p className="text-red-500 text-sm">{frequencyError}</p>
           )}
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="start-date">Start Date</Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={`w-full justify-start text-left font-normal ${
-                  !startDate && "text-muted-foreground"
-                }`}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {startDate ? (
-                  format(startDate, "PPP")
-                ) : (
-                  <span>Pick a date</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={startDate}
-                onSelect={setStartDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-          {startDateError && (
-            <p className="text-red-500 text-sm">{startDateError}</p>
-          )}
-        </div>
+        <AdvancedOptions
+          startDate={startDate}
+          setStartDate={setStartDate}
+          startDateError={startDateError}
+        />
 
         <Button
           onClick={handleSubmit}
